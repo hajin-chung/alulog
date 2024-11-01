@@ -13,13 +13,21 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    int i;
     char* input = argv[1];
-    char* hash = malloc(sizeof(char) * 512);
-    sha3(input, strlen(input), hash, 512);
-    for (int i = 0; i < sizeof(hash); i++)
-        printf("%x", hash[i]&0xff);
+    int hash_length = 64; // for sha3-512
+    unsigned char* hash = malloc(hash_length);
+
+    if (hash == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return 1;
+    }
+
+    sha3(input, strlen(input), hash, hash_length);
+
+    for (int i = 0; i < hash_length; i++)
+        printf("%02x", hash[i]);
     printf("\n");
 
     free(hash);
+    return 0;
 }
