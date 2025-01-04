@@ -60,10 +60,22 @@ func main() {
 	os.Mkdir("out/", os.ModePerm)
 	os.Mkdir("out/post", os.ModePerm)
 	os.Mkdir("out/tag", os.ModePerm)
+
 	index_html := render_index(posts)
 	os.WriteFile("out/index.html", []byte(index_html), os.ModePerm)
-	// generate_tags(tag_map)
-	// generate_tag(tag, posts)
+
+	tags_html := render_tags(tag_map)
+	os.WriteFile("out/tags.html", []byte(tags_html), os.ModePerm)
+
+	for tag, posts := range tag_map {
+		tag_html := render_tag(tag, posts)
+		os.WriteFile(
+			fmt.Sprintf("out/tag/%s.html", tag), 
+			[]byte(tag_html), 
+			os.ModePerm,
+		)
+	}
+
 	for _, post := range posts {
 		post_html := render_post(post, renderer)
 		out_path := SanitizeTitle(fmt.Sprintf("out/post/%s.html", post.Title))
