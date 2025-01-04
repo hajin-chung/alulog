@@ -1,6 +1,6 @@
 ```yaml
-title: test page
-created: 2025-01-04
+title: test page 2
+created: 2025-01-05
 tags:
     - test
     - test2
