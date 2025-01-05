@@ -1,4 +1,4 @@
-package main
+package generate
 
 import (
 	"bytes"
@@ -34,21 +34,27 @@ func ParsePostFile(path string, parser goldmark.Markdown) (Post, error) {
 	metadata := meta.Get(context)
 	fmt.Printf("%+v\n", metadata)
 	title, ok := metadata["title"].(string)
-	if !ok { title = "" }
+	if !ok {
+		title = ""
+	}
 	created, ok := metadata["created"].(string)
-	if !ok { created = "" }
+	if !ok {
+		created = ""
+	}
 	updated, ok := metadata["updated"].(string)
-	if !ok { updated = "" }
+	if !ok {
+		updated = ""
+	}
 	tags_interface := metadata["tags"].([]interface{})
 	tags := make([]string, len(tags_interface))
 	for i, v := range tags_interface {
 		tags[i] = v.(string)
 	}
-	post := Post {
-		Title: title,
+	post := Post{
+		Title:   title,
 		Created: created,
 		Updated: updated,
-		Tags: tags,
+		Tags:    tags,
 		Content: buf.String(),
 	}
 	return post, nil

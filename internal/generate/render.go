@@ -1,4 +1,4 @@
-package main
+package generate
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 
 func base_template(title string, content string) string {
 	return fmt.Sprintf(
-`<html>
+		`<html>
 	<head>
 		<title>%s</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,7 +19,7 @@ func base_template(title string, content string) string {
 	<body>
 		%s
 	</body>
-</html>`, 
+</html>`,
 		title, content,
 	)
 }
@@ -27,11 +27,11 @@ func base_template(title string, content string) string {
 func render_index(posts []Post) string {
 	post_list := "<ul>"
 	for _, post := range posts {
-		post_list += 
+		post_list +=
 			fmt.Sprintf(
-			`<li><a href="/post/%s.html">%s - %s</a></li>`, 
-			SanitizeTitle(post.Title), post.Created, post.Title,
-		)
+				`<li><a href="/post/%s.html">%s - %s</a></li>`,
+				SanitizeTitle(post.Title), post.Created, post.Title,
+			)
 	}
 	post_list += "</ul>"
 	return base_template("Alulog", post_list)
@@ -56,11 +56,11 @@ func render_tags(tag_map map[string][]Post) string {
 func render_tag(tag string, posts []Post) string {
 	post_list := "<ul>"
 	for _, post := range posts {
-		post_list += 
+		post_list +=
 			fmt.Sprintf(
-			`<li><a href="/post/%s.html">%s - %s</a></li>`, 
-			SanitizeTitle(post.Title), post.Created, post.Title,
-		)
+				`<li><a href="/post/%s.html">%s - %s</a></li>`,
+				SanitizeTitle(post.Title), post.Created, post.Title,
+			)
 	}
 	post_list += "</ul>"
 	return base_template(fmt.Sprintf("Alulog - %s", tag), post_list)

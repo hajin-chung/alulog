@@ -1,4 +1,4 @@
-package main
+package generate
 
 import (
 	"fmt"
@@ -8,15 +8,15 @@ import (
 
 	mathjax "github.com/litao91/goldmark-mathjax"
 	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark-meta"
+	"github.com/yuin/goldmark/renderer/html"
 )
 
 type Post struct {
-	Title string `yaml:"title"`
-	Created string `yaml:"created"`
-	Updated string `yaml:"updated"`
-	Tags []string `yaml:"tags"`
+	Title   string   `yaml:"title"`
+	Created string   `yaml:"created"`
+	Updated string   `yaml:"updated"`
+	Tags    []string `yaml:"tags"`
 	Content string
 }
 
@@ -40,7 +40,7 @@ func main() {
 	}
 
 	for _, entry := range entries {
-		path := "posts/" + entry.Name();
+		path := "posts/" + entry.Name()
 		fmt.Printf("%s\n", path)
 		if entry.IsDir() {
 			continue
@@ -52,7 +52,7 @@ func main() {
 		posts = append(posts, post)
 	}
 
-	sort.Slice(posts,	func(i, j int) bool {
+	sort.Slice(posts, func(i, j int) bool {
 		it, _ := time.Parse("2006-01-02", posts[i].Created)
 		jt, _ := time.Parse("2006-01-02", posts[j].Created)
 		return it.After(jt)
@@ -62,7 +62,7 @@ func main() {
 		for _, tag := range post.Tags {
 			tag_map[tag] = append(tag_map[tag], post)
 		}
-	} 
+	}
 
 	os.Mkdir("out/", os.ModePerm)
 	os.Mkdir("out/post", os.ModePerm)
@@ -77,8 +77,8 @@ func main() {
 	for tag, posts := range tag_map {
 		tag_html := render_tag(tag, posts)
 		os.WriteFile(
-			fmt.Sprintf("out/tag/%s.html", tag), 
-			[]byte(tag_html), 
+			fmt.Sprintf("out/tag/%s.html", tag),
+			[]byte(tag_html),
 			os.ModePerm,
 		)
 	}
