@@ -1,18 +1,17 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
 
-	"github.com/gomarkdown/markdown/ast"
-	"github.com/gomarkdown/markdown/parser"
-	"gopkg.in/yaml.v3"
+	"github.com/yuin/goldmark"
+	meta "github.com/yuin/goldmark-meta"
+	gparser "github.com/yuin/goldmark/parser"
 )
 
-func ParsePostFile(path string) (Post, error) {
-	extensions := parser.CommonExtensions | parser.MathJax | parser.NoEmptyLineBeforeBlock
-	parser := parser.NewWithExtensions(extensions)
+func ParsePostFile(path string, parser goldmark.Markdown) (Post, error) {
 	md_file, err := os.OpenFile(path, os.O_RDONLY, 0644)
 	if err != nil {
 		fmt.Printf("error on opening %s\n%s\n", path, err)
@@ -25,31 +24,28 @@ func ParsePostFile(path string) (Post, error) {
 
 	md_file.Close()
 
-	doc := parser.Parse(md)
-	post, err := ParseAst(doc)
+	var buf bytes.Buffer
+	context := gparser.NewContext()
+	err = parser.Convert(md, &buf, gparser.WithContext(context))
 	if err != nil {
-		fmt.Printf("error on parsing ast %s\n%s\n", path, err)
+		fmt.Printf("error on converting %s\n%s\n", path, err)
+	}
+
+	metadata := meta.Get(context)
+	title, ok := metadata["title"].(string)
+	if !ok { title = "" }
+	created, ok := metadata["created"].(string)
+	if !ok { created = "" }
+	updated, ok := metadata["updated"].(string)
+	if !ok { updated = "" }
+	tags, ok := metadata["tags"].([]string)
+	if !ok { tags = []string{} }
+	post := Post {
+		Title: title,
+		Created: created,
+		Updated: updated,
+		Tags: tags,
+		Content: buf.String(),
 	}
 	return post, nil
 }
-
-func ParseAst(doc ast.Node) (Post, error) {
-	post := Post{}
-	post.Content = doc
-	children := doc.GetChildren()
-	if len(children) == 0 {
-		return post, fmt.Errorf("no chidren")
-	}
-
-	data_block, ok := children[0].(*ast.CodeBlock)
-	if !ok {
-		return post, fmt.Errorf("no metadata")
-	}
-	data_str := data_block.Literal
-	err := yaml.Unmarshal([]byte(data_str), &post)
-	fmt.Printf("%+v\n", post)
-	doc.SetChildren(children[1:])
-
-	return post, err
-}
-

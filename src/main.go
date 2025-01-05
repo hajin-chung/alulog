@@ -6,8 +6,10 @@ import (
 	"sort"
 	"time"
 
-	"github.com/gomarkdown/markdown/ast"
-	"github.com/gomarkdown/markdown/html"
+	mathjax "github.com/litao91/goldmark-mathjax"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/renderer/html"
+	"github.com/yuin/goldmark-meta"
 )
 
 type Post struct {
@@ -15,13 +17,18 @@ type Post struct {
 	Created string `yaml:"created"`
 	Updated string `yaml:"updated"`
 	Tags []string `yaml:"tags"`
-	Content ast.Node
+	Content string
 }
 
 func main() {
-	html_flags := html.CommonFlags | html.HrefTargetBlank
-	opts := html.RendererOptions{Flags: html_flags}
-	renderer := html.NewRenderer(opts)
+	parser := goldmark.New(
+		goldmark.WithExtensions(
+			mathjax.MathJax,
+			meta.Meta,
+		),
+		goldmark.WithParserOptions(),
+		goldmark.WithRendererOptions(html.WithHardWraps()),
+	)
 
 	tag_map := map[string][]Post{}
 	posts := []Post{}
@@ -38,7 +45,7 @@ func main() {
 		if entry.IsDir() {
 			continue
 		}
-		post, err := ParsePostFile(path)
+		post, err := ParsePostFile(path, parser)
 		if err != nil {
 			fmt.Printf("error on parsing %s\n%s\n", entry.Name(), err)
 		}
@@ -77,7 +84,7 @@ func main() {
 	}
 
 	for _, post := range posts {
-		post_html := render_post(post, renderer)
+		post_html := render_post(post)
 		out_path := SanitizeTitle(fmt.Sprintf("out/post/%s.html", post.Title))
 		os.WriteFile(out_path, []byte(post_html), os.ModePerm)
 	}

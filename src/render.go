@@ -2,14 +2,24 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/gomarkdown/markdown"
-	"github.com/gomarkdown/markdown/html"
 )
 
 func base_template(title string, content string) string {
 	return fmt.Sprintf(
-		`<html><head><title>%s</title></head><body>%s</body></html>`, 
+`<html>
+	<head>
+		<title>%s</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script>
+		MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['\\(', '\\)']] } };
+		</script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+		</script>
+	</head>
+	<body>
+		%s
+	</body>
+</html>`, 
 		title, content,
 	)
 }
@@ -27,9 +37,8 @@ func render_index(posts []Post) string {
 	return base_template("Alulog", post_list)
 }
 
-func render_post(post Post, renderer *html.Renderer) string {
-	content := string(markdown.Render(post.Content, renderer))
-	return base_template(post.Title, content)
+func render_post(post Post) string {
+	return base_template(post.Title, post.Content)
 }
 
 func render_tags(tag_map map[string][]Post) string {

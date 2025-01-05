@@ -1,10 +1,10 @@
-```yaml
+---
 title: test page
 created: 2025-01-04
 tags:
     - test
     - test2
-```
+---
 
 # this is a test page
 
