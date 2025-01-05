@@ -20,7 +20,7 @@ type Post struct {
 	Content string
 }
 
-func main() {
+func GenereatePosts() error {
 	parser := goldmark.New(
 		goldmark.WithExtensions(
 			mathjax.MathJax,
@@ -36,7 +36,7 @@ func main() {
 	entries, err := os.ReadDir("posts")
 	if err != nil {
 		fmt.Printf("error on reading dir ./posts\n%s\n", err)
-		return
+		return err
 	}
 
 	for _, entry := range entries {
@@ -88,4 +88,6 @@ func main() {
 		out_path := SanitizeTitle(fmt.Sprintf("out/post/%s.html", post.Title))
 		os.WriteFile(out_path, []byte(post_html), os.ModePerm)
 	}
+
+	return nil
 }

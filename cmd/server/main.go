@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"hajin-chung/deps.me/internal/generate"
 	"io"
 	"log"
 	"net/http"
@@ -96,7 +97,7 @@ func HandleWrite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// go Publish()
+	go Publish()
 }
 
 func HandleDelete(w http.ResponseWriter, r *http.Request) {
@@ -117,4 +118,9 @@ func HandleDelete(w http.ResponseWriter, r *http.Request) {
 }
 
 func Publish() {
+	err := generate.GenereatePosts()
+	if err != nil {
+		log.Printf("error on generating posts\n%s\n", err)
+		return
+	}
 }
