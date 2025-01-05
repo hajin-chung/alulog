@@ -1,4 +1,4 @@
-module hajin-chung/alogen
+module hajin-chung/deps-gen
 
 go 1.23.2
 

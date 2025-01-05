@@ -32,14 +32,18 @@ func ParsePostFile(path string, parser goldmark.Markdown) (Post, error) {
 	}
 
 	metadata := meta.Get(context)
+	fmt.Printf("%+v\n", metadata)
 	title, ok := metadata["title"].(string)
 	if !ok { title = "" }
 	created, ok := metadata["created"].(string)
 	if !ok { created = "" }
 	updated, ok := metadata["updated"].(string)
 	if !ok { updated = "" }
-	tags, ok := metadata["tags"].([]string)
-	if !ok { tags = []string{} }
+	tags_interface := metadata["tags"].([]interface{})
+	tags := make([]string, len(tags_interface))
+	for i, v := range tags_interface {
+		tags[i] = v.(string)
+	}
 	post := Post {
 		Title: title,
 		Created: created,
