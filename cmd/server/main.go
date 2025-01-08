@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"hajin-chung/deps.me/internal/generate"
+	"hajin-chung/deps.me/internal/upload"
 	"io"
 	"log"
 	"net/http"
@@ -20,6 +21,7 @@ func main() {
 	mux.HandleFunc("/read", HandleRead)
 	mux.HandleFunc("/write", HandleWrite)
 	mux.HandleFunc("/delete", HandleDelete)
+	mux.HandleFunc("/publish", HandlePublish)
 	log.Fatal(http.ListenAndServe(":80", mux))
 }
 
@@ -117,10 +119,24 @@ func HandleDelete(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Publish() {
+func HandlePublish(w http.ResponseWriter, r *http.Request) {
+	err := Publish()
+	if err != nil {
+		w.WriteHeader(500)
+		return
+	}
+}
+
+func Publish() error {
 	err := generate.GenereatePosts()
 	if err != nil {
 		log.Printf("error on generating posts\n%s\n", err)
-		return
+		return err
 	}
+	err = upload.UploadDirectory("deps.me", "out", "ap-northeast-2")
+	if err != nil {
+		log.Printf("error on uploading directory\n%s\n", err)
+		return err
+	}
+	return nil
 }
