@@ -40,7 +40,7 @@ func HandleAuth(c *fiber.Ctx) error {
 }
 
 func HandleList(c *fiber.Ctx) error {
-	entries, err := os.ReadDir("posts")
+	entries, err := os.ReadDir(env.PostPath)
 	if err != nil {
 		log.Printf("error on reading dir ./posts\n%s\n", err)
 		return c.SendStatus(500)
