@@ -1,7 +1,1 @@
-cd server
-go build -o ../deps-server . 
-cd ..
-
-cd generate
-go build -o ../deps-gen . 
-cd ..
+docker build -t alulog:0.1 .
