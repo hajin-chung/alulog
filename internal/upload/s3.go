@@ -1,18 +1,26 @@
 package upload
 
 import (
-  "context"
-  "log"
-  "os"
-  "path/filepath"
+	"context"
+	"log"
+	"os"
+	"path/filepath"
 
-  "github.com/aws/aws-sdk-go-v2/config"
-  "github.com/aws/aws-sdk-go-v2/feature/s3/manager"
-  "github.com/aws/aws-sdk-go-v2/service/s3"
+	"hajin-chung/deps.me/internal/env"
+
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 func UploadDirectory(bucket_name string, dir_path string, region string) error {
-  cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(region))
+  staticCred := credentials.NewStaticCredentialsProvider(
+    env.AwsAccessKey, env.AwsSecret, "")
+  cfg, err := config.LoadDefaultConfig(
+    context.TODO(), 
+    config.WithRegion(region), 
+    config.WithCredentialsProvider(staticCred))
   if err != nil {
     log.Printf("error on loading default config\n%s\n", err)
     return err

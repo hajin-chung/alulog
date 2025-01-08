@@ -6,6 +6,8 @@ import (
 	"sort"
 	"time"
 
+	"hajin-chung/deps.me/internal/env"
+
 	mathjax "github.com/litao91/goldmark-mathjax"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark-meta"
@@ -40,7 +42,7 @@ func GenereatePosts() error {
 	}
 
 	for _, entry := range entries {
-		path := "posts/" + entry.Name()
+		path := env.PostPath + entry.Name()
 		fmt.Printf("%s\n", path)
 		if entry.IsDir() {
 			continue
