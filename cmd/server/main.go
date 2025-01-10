@@ -34,7 +34,7 @@ func HandleAuth(c *fiber.Ctx) error {
 	}
 	password := auth_list[0]
 	if password == env.Secret {
-		c.Next()
+		return c.Next()
 	}
 	return c.SendStatus(500)
 }
