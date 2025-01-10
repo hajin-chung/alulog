@@ -66,7 +66,7 @@ func HandleList(c *fiber.Ctx) error {
 }
 
 func HandleRead(c *fiber.Ctx) error {
-	filename := c.AllParams()["file"]
+	filename := c.Query("file")
 	content, err := os.ReadFile(env.PostPath + filename)
 	if err != nil {
 		log.Printf("error on reading file %s\n%s\n", filename, err)
@@ -81,7 +81,7 @@ func HandleRead(c *fiber.Ctx) error {
 }
 
 func HandleWrite(c *fiber.Ctx) error {
-	filename := c.AllParams()["file"]
+	filename := c.Query("file")
 	body := c.Body()
 	err := os.WriteFile(env.PostPath + filename, body, os.ModePerm)
 	if err != nil {
@@ -94,7 +94,7 @@ func HandleWrite(c *fiber.Ctx) error {
 }
 
 func HandleDelete(c *fiber.Ctx) error {
-	filename := c.AllParams()["file"]
+	filename := c.Query("file")
 	err := os.Remove(env.PostPath + filename)
 	if err != nil {
 		log.Printf("error on removing file %s\n%s\n", filename, err)
