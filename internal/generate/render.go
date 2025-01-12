@@ -15,8 +15,14 @@ func base_template(title string, content string) string {
 		</script>
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
 		</script>
+		<link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Oleo+Script+Swash+Caps:wght@400;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/styles.css">
 	</head>
 	<body>
+		<a id="title" href="https://blog.deps.me/"><h1>deps.me</h1></a>
 		%s
 	</body>
 </html>`,
