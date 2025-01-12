@@ -23,6 +23,10 @@ func base_template(title string, content string) string {
 	</head>
 	<body>
 		<a id="title" href="https://blog.deps.me/"><h1>deps.me</h1></a>
+		<nav>
+			<a id="title" href="/tags.html"><p>tags</p></a>
+			<a id="title" href="/"><p>posts</p></a>
+		</nav>
 		%s
 	</body>
 </html>`,
