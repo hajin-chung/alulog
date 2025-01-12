@@ -64,7 +64,7 @@ func render_tags(tag_map map[string][]Post) string {
 }
 
 func render_tag(tag string, posts []Post) string {
-	post_list := fmt.Sprintf("<h2>%s</h2>", tag)
+	post_list := fmt.Sprintf(`<h2 id="tag">#%s</h2>`, tag)
 	post_list += `<ul id="posts">`
 	for _, post := range posts {
 		post_list +=
