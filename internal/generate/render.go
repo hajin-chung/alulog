@@ -35,7 +35,7 @@ func base_template(title string, content string) string {
 }
 
 func render_index(posts []Post) string {
-	post_list := "<ul>"
+	post_list := `<ul id="posts">`
 	for _, post := range posts {
 		post_list +=
 			fmt.Sprintf(
@@ -52,7 +52,7 @@ func render_post(post Post) string {
 }
 
 func render_tags(tag_map map[string][]Post) string {
-	tags_list := "<ul>"
+	tags_list := `<ul id="tags">`
 	for tag, posts := range tag_map {
 		tags_list +=
 			fmt.Sprintf(
@@ -64,7 +64,8 @@ func render_tags(tag_map map[string][]Post) string {
 }
 
 func render_tag(tag string, posts []Post) string {
-	post_list := "<ul>"
+	post_list := fmt.Sprintf("<h2>%s</h2>", tag)
+	post_list += `<ul id="posts">`
 	for _, post := range posts {
 		post_list +=
 			fmt.Sprintf(
