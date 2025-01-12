@@ -5,6 +5,7 @@ import "os"
 var AwsAccessKey string
 var AwsSecret string
 var PostPath string
+var OutPath string
 var Secret string
 
 func LoadEnv() {
@@ -12,4 +13,5 @@ func LoadEnv() {
 	AwsSecret, _ = os.LookupEnv("AWS_SECRET_ACCESS_KEY")
 	Secret, _ = os.LookupEnv("DEPS_SECRET")
 	PostPath, _ = os.LookupEnv("DEPS_POST_PATH")
+	OutPath, _ = os.LookupEnv("DEPS_OUT_PATH")
 }

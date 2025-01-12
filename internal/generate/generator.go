@@ -66,20 +66,20 @@ func GenereatePosts() error {
 		}
 	}
 
-	os.Mkdir("out/", os.ModePerm)
-	os.Mkdir("out/post", os.ModePerm)
-	os.Mkdir("out/tag", os.ModePerm)
+	os.Mkdir(env.OutPath, os.ModePerm)
+	os.Mkdir(env.OutPath+"/post", os.ModePerm)
+	os.Mkdir(env.OutPath+"/tag", os.ModePerm)
 
 	index_html := render_index(posts)
-	os.WriteFile("out/index.html", []byte(index_html), os.ModePerm)
+	os.WriteFile(env.OutPath+"/index.html", []byte(index_html), os.ModePerm)
 
 	tags_html := render_tags(tag_map)
-	os.WriteFile("out/tags.html", []byte(tags_html), os.ModePerm)
+	os.WriteFile(env.OutPath+"/tags.html", []byte(tags_html), os.ModePerm)
 
 	for tag, posts := range tag_map {
 		tag_html := render_tag(tag, posts)
 		os.WriteFile(
-			fmt.Sprintf("out/tag/%s.html", tag),
+			fmt.Sprintf(env.OutPath+"/tag/%s.html", tag),
 			[]byte(tag_html),
 			os.ModePerm,
 		)
@@ -87,7 +87,7 @@ func GenereatePosts() error {
 
 	for _, post := range posts {
 		post_html := render_post(post)
-		out_path := SanitizeTitle(fmt.Sprintf("out/post/%s.html", post.Title))
+		out_path := SanitizeTitle(fmt.Sprintf("%s/post/%s.html", env.OutPath, post.Title))
 		os.WriteFile(out_path, []byte(post_html), os.ModePerm)
 	}
 

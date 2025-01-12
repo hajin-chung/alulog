@@ -117,7 +117,7 @@ func Publish() error {
 		log.Printf("error on generating posts\n%s\n", err)
 		return err
 	}
-	err = upload.UploadDirectory("deps.me", "out", "ap-northeast-2")
+	err = upload.UploadDirectory("deps.me", env.OutPath, "ap-northeast-2")
 	if err != nil {
 		log.Printf("error on uploading directory\n%s\n", err)
 		return err
