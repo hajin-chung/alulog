@@ -9,6 +9,7 @@ func base_template(title string, content string) string {
 		`<html>
 	<head>
 		<title>%s</title>
+		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<script>
 		MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['\\(', '\\)']] } };
