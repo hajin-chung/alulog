@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 type PostList struct {
@@ -18,6 +19,7 @@ type PostList struct {
 func main() {
 	env.LoadEnv()
 	app := fiber.New()
+	app.Use(cors.New())
 	app.Use(HandleAuth)
 	app.Get("/list", HandleList)
 	app.Get("/read", HandleRead)
