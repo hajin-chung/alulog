@@ -84,8 +84,8 @@ func HandleRead(c *fiber.Ctx) error {
 
 func HandleWrite(c *fiber.Ctx) error {
 	filename := c.Query("file")
-	body := string(c.Body()[:])
-	err := os.WriteFile(env.PostPath+filename, []byte(body), os.ModePerm)
+	body := c.Body()
+	err := os.WriteFile(env.PostPath+filename, body, os.ModePerm)
 	if err != nil {
 		log.Printf("error on writing new file %s\n%s\n", filename, err)
 		return c.SendStatus(500)
